@@ -27,13 +27,15 @@ AuditX CLI provides a terminal-native, interactive interface that streamlines se
                  [27] Kismet                    [28] JADX
                  [29] Apktool                   [30] Binwalk
                  [31] Radare2                   [32] Network Recon
+                 [0] Exit / Quit
 ```
 
 ---
 
 ## Features
 
-- **Interactive ASCII HUD**: Dynamic 2-column tool navigation and input prompts supporting 31 tools.
+- **Interactive Looping HUD**: Continuous menu loop returning back after scan completion, with explicit `[0]` or `'q'` exit options.
+- **Dynamic 2-Column Interface**: Fast tool selection supporting all 31 security tools and Network Recon.
 - **Multi-Target Routing**: Dedicated target resolvers for IP, Domain, URL, Cloud Providers, Local Paths, Usernames, and Wireless Interfaces.
 - **Built-in Network Recon**: Automatic local IP detection and live subnet sweep (`nmap -sn` or `arp-scan`).
 - **Orchestrated Tool Execution**: Parameterized command generation with live terminal output streaming.

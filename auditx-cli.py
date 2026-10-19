@@ -101,6 +101,7 @@ def print_ui(tools_list):
         formatted_tools.append(f"[{i+1}] {meta['display'][:col_width-6]}")
     
     formatted_tools.append(f"[{len(tools_list)+1}] Network Recon")
+    formatted_tools.append(f"[0] Exit / Quit")
     
     num_cols = 2
     rows = []
@@ -122,60 +123,72 @@ def print_ui(tools_list):
         print(f"{left}   {right}")
 
 def main():
-    try:
-        print_ui(TOOLS)
-        
-        tool_keys = list(TOOLS.keys())
-        total_options = len(tool_keys) + 1
-        
-        print("\n")
-        choice = input(f"{BOLD}[>] Select tool (1-{total_options}): {RESET}").strip()
-        
-        if not choice.isdigit():
-            print(f"{RED}[!] Invalid choice.{RESET}")
-            return
-            
-        choice = int(choice)
-        if choice < 1 or choice > total_options:
-            print(f"{RED}[!] Choice out of range.{RESET}")
-            return
-            
-        if choice == total_options:
-            perform_network_recon()
-            return
-            
-        selected_key = tool_keys[choice - 1]
-        selected_tool = TOOLS[selected_key]
-        
-        input_type = selected_tool.get('input_type', 'target')
-        target = input(f"{BOLD}[>] Enter Target {input_type.capitalize()}: {RESET}").strip()
-        
-        if not target:
-            print(f"{RED}[!] Target cannot be empty.{RESET}")
-            return
-            
-        print(f"\n{BOLD}{BLUE}[*] Preparing {selected_tool['display']}...{RESET}")
-        
-        cmd = selected_tool['build_cmd'](target, {})
-        
-        if selected_key == "msf_rpc":
-            audit.run_msf_rpc(target)
-            return
-            
-        print(f"{CYAN}[$] {' '.join(cmd)}{RESET}\n")
-        
+    tool_keys = list(TOOLS.keys())
+    total_options = len(tool_keys) + 1  # Network Recon is last numbered tool option
+
+    while True:
         try:
-            proc = subprocess.Popen(cmd)
-            proc.wait()
-        except FileNotFoundError:
-            print(f"{RED}[!] Command not found: {cmd[0]}{RESET}")
-            print(f"{YELLOW}[*] You may need to install it first using: {RESET}")
-            print(f"    {' '.join(selected_tool.get('install_cmd', []))}")
-        except KeyboardInterrupt:
-            print(f"\n{YELLOW}[!] Execution interrupted by user.{RESET}")
+            print_ui(TOOLS)
+            print(f"\n{BLUE}──────────────────────────────────────────────────────────────────────────{RESET}")
+            choice = input(f"{BOLD}[>] Select tool [1-{total_options}, 0/q to quit]: {RESET}").strip()
             
-    except KeyboardInterrupt:
-        print(f"\n{YELLOW}[!] Exiting...{RESET}")
+            if choice.lower() in ["0", "q", "quit", "exit"]:
+                print(f"\n{CYAN}[*] Exiting AuditX CLI. Stay secure!{RESET}\n")
+                break
+                
+            if not choice.isdigit():
+                print(f"{RED}[!] Invalid choice. Please enter a number between 0 and {total_options} or 'q'.{RESET}")
+                input(f"{YELLOW}Press Enter to continue...{RESET}")
+                continue
+                
+            choice_num = int(choice)
+            if choice_num < 1 or choice_num > total_options:
+                print(f"{RED}[!] Choice out of range (1-{total_options}).{RESET}")
+                input(f"{YELLOW}Press Enter to continue...{RESET}")
+                continue
+                
+            if choice_num == total_options:
+                perform_network_recon()
+                input(f"\n{BOLD}{GREEN}[✓] Network Recon completed. Press Enter to return to menu...{RESET}")
+                continue
+                
+            selected_key = tool_keys[choice_num - 1]
+            selected_tool = TOOLS[selected_key]
+            
+            input_type = selected_tool.get('input_type', 'target')
+            target = input(f"{BOLD}[>] Enter Target {input_type.capitalize()}: {RESET}").strip()
+            
+            if not target:
+                print(f"{RED}[!] Target cannot be empty.{RESET}")
+                input(f"{YELLOW}Press Enter to continue...{RESET}")
+                continue
+                
+            print(f"\n{BOLD}{BLUE}[*] Preparing {selected_tool['display']}...{RESET}")
+            
+            cmd = selected_tool['build_cmd'](target, {})
+            
+            if selected_key == "msf_rpc":
+                audit.run_msf_rpc(target)
+                input(f"\n{BOLD}{GREEN}[✓] Scan finished. Press Enter to return to menu...{RESET}")
+                continue
+                
+            print(f"{CYAN}[$] {' '.join(cmd)}{RESET}\n")
+            
+            try:
+                proc = subprocess.Popen(cmd)
+                proc.wait()
+            except FileNotFoundError:
+                print(f"{RED}[!] Command not found: {cmd[0]}{RESET}")
+                print(f"{YELLOW}[*] You may need to install it first using: {RESET}")
+                print(f"    {' '.join(selected_tool.get('install_cmd', []))}")
+            except KeyboardInterrupt:
+                print(f"\n{YELLOW}[!] Execution interrupted by user.{RESET}")
+                
+            input(f"\n{BOLD}{GREEN}[✓] Scan finished. Press Enter to return to menu...{RESET}")
+
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n\n{YELLOW}[!] Exiting AuditX CLI...{RESET}\n")
+            break
 
 if __name__ == "__main__":
     main()
