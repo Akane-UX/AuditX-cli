@@ -9,7 +9,7 @@ Interactive terminal wrapper and security orchestrator for rapid security auditi
 AuditX CLI provides a terminal-native, interactive interface that streamlines security tooling execution. It eliminates the need to remember repetitive command-line flags while preserving real-time execution feedback.
 
 ```text
-      /\         AuditX - v1.2.0-cli
+      /\         AuditX - v1.8.0-cli
      /  \        Available Tools:
     /    \       [1] Sherlock                   [2] theHarvester
    /      \      [3] Sublist3r                  [4] Nmap
@@ -19,16 +19,25 @@ AuditX CLI provides a terminal-native, interactive interface that streamlines se
                  [11] Msfvenom Payload          [12] Nuclei
                  [13] MSF Listener              [14] Gobuster
                  [15] NetExec (CME)             [16] Enum4Linux-NG
-                 [17] Gitleaks                  [18] Network Recon
+                 [17] Gitleaks                  [18] ScoutSuite
+                 [19] Prowler                   [20] Pacu
+                 [21] Trivy Cloud               [22] Checkov
+                 [23] Aircrack-ng               [24] Airodump-ng
+                 [25] Airmon-ng                 [26] Wifite
+                 [27] Kismet                    [28] JADX
+                 [29] Apktool                   [30] Binwalk
+                 [31] Radare2                   [32] Network Recon
 ```
 
 ---
 
 ## Features
 
-- **Interactive ASCII HUD**: Fast tool navigation and input prompts.
+- **Interactive ASCII HUD**: Dynamic 2-column tool navigation and input prompts supporting 31 tools.
+- **Multi-Target Routing**: Dedicated target resolvers for IP, Domain, URL, Cloud Providers, Local Paths, Usernames, and Wireless Interfaces.
 - **Built-in Network Recon**: Automatic local IP detection and live subnet sweep (`nmap -sn` or `arp-scan`).
 - **Orchestrated Tool Execution**: Parameterized command generation with live terminal output streaming.
+- **Report Export Subcommand**: Non-blocking export handler supporting `.md`, `.json`, and `.txt`.
 - **Metasploit RPC Integration**: Automated connection and auxiliary module execution via `msfrpcd`.
 - **Zero Heavy GUI Dependencies**: Standalone Python architecture that runs on any modern terminal emulator.
 
@@ -50,7 +59,7 @@ AuditX-cli/
 
 ---
 
-## Integrated Tools
+## Integrated Tools (31 Tools)
 
 | Category | Tools | Description |
 |---|---|---|
@@ -58,6 +67,9 @@ AuditX-cli/
 | **Network & AD** | Nmap, RustScan, NetExec (CME), Enum4Linux-NG | Port scanning, service detection, Samba/Active Directory enumeration |
 | **Web Security** | Nikto, WhatWeb, SQLMap, Gobuster, Nuclei | Web fingerprinting, directory fuzzing, SQL injection, YAML-based template scanning |
 | **Exploitation & RPC** | Metasploit Aux, Metasploit RPC, Msfvenom, MSF Listener | Auxiliary scanners, payload staging, automated RPC workflows, reverse handlers |
+| **Cloud Security** | ScoutSuite, Prowler, Pacu, Trivy Cloud, Checkov | Multi-cloud compliance (AWS/Azure/GCP), CIS benchmarks, IaC analysis |
+| **Wireless Security** | Aircrack-ng, Airodump-ng, Airmon-ng, Wifite, Kismet | Packet sniffing, 802.11 monitor mode, handshake capture, automated WiFi auditing |
+| **Reverse Engineering** | JADX, Apktool, Binwalk, Radare2 | APK decompilation, smali disassembly, firmware extraction, binary analysis |
 | **Network Recon** | Built-in Engine | Local IP resolution and subnet discovery |
 
 ---

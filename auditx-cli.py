@@ -90,7 +90,7 @@ def print_ui(tools_list):
     ]
     
     right_header = [
-        f"{BOLD}AuditX - v1.2.0-cli{RESET}",
+        f"{BOLD}AuditX - v1.8.0-cli{RESET}",
         f"Available Tools:"
     ]
     
