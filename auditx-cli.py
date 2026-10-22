@@ -90,7 +90,7 @@ def print_ui(tools_list):
     ]
     
     right_header = [
-        f"{BOLD}AuditX - v1.8.0-cli{RESET}",
+        f"{BOLD}AuditX - v1.9.0-cli{RESET}",
         f"Available Tools:"
     ]
     
@@ -165,7 +165,35 @@ def main():
                 
             print(f"\n{BOLD}{BLUE}[*] Preparing {selected_tool['display']}...{RESET}")
             
-            cmd = selected_tool['build_cmd'](target, {})
+            if selected_key == "wapiti":
+                print(f"\n{BOLD}{CYAN}=== Wapiti Module Selection ==={RESET}")
+                print(f"  [1] All 30 Modules (-m all) {GREEN}[Recommended / Full Web Audit]{RESET}")
+                print(f"  [2] Core Web Attacks (sql, timesql, xss, permanentxss, ssrf, exec, file, upload)")
+                print(f"  [3] Remote Code & Critical CVEs (log4shell, spring4shell, shellshock, xxe, ldap)")
+                print(f"  [4] Recon, Auth & Surface (buster, backup, brute_login_form, cms, htaccess, wapp)")
+                print(f"  [5] Custom Modules (comma-separated, e.g. sql,xss,ssrf)")
+                print(f"  [6] View All 30 Module Details & Descriptions")
+                mod_choice = input(f"{BOLD}[>] Choose mode [1-6, default 1]: {RESET}").strip()
+                modules_opt = "all"
+                if mod_choice == "2":
+                    modules_opt = "sql,timesql,xss,permanentxss,ssrf,exec,file,upload"
+                elif mod_choice == "3":
+                    modules_opt = "log4shell,spring4shell,shellshock,xxe,ldap"
+                elif mod_choice == "4":
+                    modules_opt = "buster,backup,brute_login_form,cms,htaccess,wapp"
+                elif mod_choice == "5":
+                    custom_m = input(f"{BOLD}[>] Enter module names (comma-separated): {RESET}").strip()
+                    modules_opt = custom_m if custom_m else "all"
+                elif mod_choice == "6":
+                    print(f"\n{BOLD}{BLUE}=== All 30 Wapiti Attack Modules ==={RESET}")
+                    for m_name, m_desc in getattr(audit, "WAPITI_MODULES", {}).items():
+                        print(f"  {GREEN}{m_name:<18}{RESET} : {m_desc}")
+                    print()
+                    modules_opt = input(f"{BOLD}[>] Enter modules to run or press Enter for 'all': {RESET}").strip() or "all"
+                
+                cmd = selected_tool['build_cmd'](target, {"modules": modules_opt})
+            else:
+                cmd = selected_tool['build_cmd'](target, {})
             
             if selected_key == "msf_rpc":
                 audit.run_msf_rpc(target)
